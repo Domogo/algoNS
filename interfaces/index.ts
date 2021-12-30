@@ -8,3 +8,10 @@ export type User = {
   id: number
   name: string
 }
+
+
+export type Domain = {
+  id: number
+  domainName: string
+  address: string
+}
