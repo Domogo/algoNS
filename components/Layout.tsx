@@ -26,9 +26,6 @@ const Layout = ({ children, title = 'AlgoNS - Algorand Name Service' }: Props) =
             <Link href="/about">
               <Button variant="link">About</Button>
             </Link>
-            <Link href="/users">
-              <Button variant="link">Users List</Button>
-            </Link>
             <ChakraLink href="/api" isExternal>
               <Button variant="link">API</Button>
             </ChakraLink>

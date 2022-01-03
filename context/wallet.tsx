@@ -6,6 +6,7 @@ import { IInternalEvent } from "@walletconnect/types";
 interface WalletContext {
   connector: WalletConnect;
   connected: boolean;
+  address: string;
   killSession: () => void;
   walletConnectInit: () => void;
 }
@@ -103,7 +104,7 @@ export const WalletProvider: FC = ({ children }) => {
     setConnected(false);
   }
 
-  return <walletContext.Provider value={{ connector, connected, killSession, walletConnectInit }}>{children}</walletContext.Provider>;
+  return <walletContext.Provider value={{ connector, connected, killSession, walletConnectInit, address }}>{children}</walletContext.Provider>;
 };
 
 export const useWalletContext = () => useContext(walletContext);
