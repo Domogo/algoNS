@@ -82,7 +82,7 @@ export const WalletProvider: FC = ({ children }) => {
 
   const onConnect = (payload: IInternalEvent) => {
     setAccounts(payload.params[0]);
-    setAddress(payload.params[0][0]);
+    setAddress(payload.params[0]["accounts"][0]);
     setConnected(true);
   };
 

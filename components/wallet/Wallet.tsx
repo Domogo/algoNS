@@ -1,8 +1,8 @@
-import { Button } from "@chakra-ui/react";
+import { Button, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import { useWalletContext } from "context/wallet";
 
 const Wallet = () => {
-  const { killSession, walletConnectInit, connected } = useWalletContext(); 
+  const { killSession, walletConnectInit, connected, address } = useWalletContext(); 
 
   return (
     <>
@@ -11,9 +11,23 @@ const Wallet = () => {
           Connect Wallet
         </Button>
       ) : (
-        <Button onClick={killSession} variant="outline" colorScheme="pink">
-          Disconnect Wallet
-        </Button>
+        <Menu>
+          <MenuButton
+            as={Button}
+            colorScheme="pink"
+            variant="outline"
+          >
+            My Wallet
+          </MenuButton>
+          <MenuList>
+            <MenuItem>
+              {address}
+            </MenuItem>
+            <MenuItem onClick={killSession}>
+              Disconnect Wallet
+            </MenuItem>
+          </MenuList>
+        </Menu>
       )}
     </>
   );
