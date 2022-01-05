@@ -1,5 +1,5 @@
 import Layout from "components/Layout";
-import { Box, Button, Flex, Heading, Input, InputGroup, InputRightAddon, Spinner } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, Input, InputGroup, InputRightAddon, Spinner, useToast } from "@chakra-ui/react";
 import { useState } from "react";
 import axios from "axios";
 import { Domain } from "@prisma/client";
@@ -9,20 +9,27 @@ const IndexPage = () => {
   const [value, setValue] = useState("");
   const [searchData, setSearchData] = useState<Domain>();
   const [searchTriggered, setSearchTriggered] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
   const { address, connected } = useWalletContext(); 
 
+  const toast = useToast();
+
   // numbers, letters, unicode characters (emojis). Limited to 100 characters.
-  const DOMAIN_VALIDATION_REGEX = /^(?:[a-zA-Z0-9\u00a9\u00ae\u2000-\u3300\ud83c\ud000-\udfff\ud83d\ud000-\udfff\ud83e\ud000-\udfff]){1,100}$/;
+  const DOMAIN_VALIDATION_REGEX = /^(?:[a-zA-Z0-9\u00a9\u00ae\u2000-\u3300\ud83c\ud000-\udfff\ud83d\ud000-\udfff\ud83e\ud000-\udfff-]){1,100}$/;
 
   const handleChange = (e: any) => {
     setSearchTriggered(false);
-    console.log(e.target.value.match(DOMAIN_VALIDATION_REGEX));
     if (e.target.value === '' || DOMAIN_VALIDATION_REGEX.test(e.target.value)) {
       setValue(e.target.value.trim());
     } else {
-      console.log("invalid");
-      console.log(e.target.value);
+      toast({
+        title: "Invalid character(s).",
+        description: "Allowed characters are letters, numbers, and unicode characters (emojis).",
+        status: "error",
+        isClosable: true,
+        position: "bottom-right"
+      })
     }
   };
 
@@ -32,11 +39,39 @@ const IndexPage = () => {
       setSearchTriggered(true);
       setSearchData(res.data);
       setLoading(false);
+    }).catch(err => {
+      toast({
+        title: "Error",
+        description: "Something went wrong.",
+        status: "error",
+        isClosable: true,
+        position: "bottom-right"
+      })
     });
   }
 
   const reserveDomain = () => {
-    axios.post(`/api/domain/`, {params: {domain: value, publicKey: address }}).then(res => {console.log(res)})
+    if (!isSubmitting) {
+      setIsSubmitting(true);
+      axios.post(`/api/domain/`, {params: {domain: value, publicKey: address }}).then(res => {
+        console.log(res)
+        setSearchData(res.data);
+        toast({
+          title: "Success!",
+          description: `${value}.algo successfully linked to ${address}.`,
+          status: "success",
+          isClosable: true,
+          position: "bottom-right"
+        })
+      }).catch(err => {
+        toast({
+          title: "Error reserving domain.",
+          status: "error",
+          isClosable: true,
+          position: "bottom-right"
+        })
+      });
+    }
   }
 
   return (

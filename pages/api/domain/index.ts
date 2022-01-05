@@ -8,6 +8,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       res.status(400).json({error: "Missing required parameters domain or wallet address."});
       return;
     } else {
+
+      // check total count of domains
+      // limit 1 per wallet
       const query_res = await prisma.domain.create({
         data: {
           name: domain,

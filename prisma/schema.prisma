@@ -14,7 +14,7 @@ model Domain {
   id          Int @default(autoincrement()) @id
   name        String @unique
   suffix      String @default("algo")
-  publicKey   String @unique
+  publicKey   String
   createdAt   DateTime @default(now())
   expiresAt   DateTime
   nftId       Int?
