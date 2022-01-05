@@ -54,7 +54,6 @@ const IndexPage = () => {
     if (!isSubmitting) {
       setIsSubmitting(true);
       axios.post(`/api/domain/`, {params: {domain: value, publicKey: address }}).then(res => {
-        console.log(res)
         setSearchData(res.data);
         toast({
           title: "Success!",
@@ -64,8 +63,11 @@ const IndexPage = () => {
           position: "bottom-right"
         })
       }).catch(err => {
+        let errorMessage = "";
+        if (err.response.data.error) { errorMessage = err.response.data.error; }
         toast({
           title: "Error reserving domain.",
+          description: errorMessage,
           status: "error",
           isClosable: true,
           position: "bottom-right"

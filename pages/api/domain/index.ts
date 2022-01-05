@@ -9,8 +9,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       return;
     } else {
 
-      // check total count of domains
-      // limit 1 per wallet
+      // check total count of domains and limit to only 9999 domains for now
+      const domainCount = await prisma.domain.count({
+        where: {
+          publicKey,
+        }
+      });
+
+      if (domainCount > 0) {
+        res.status(400).json({error: "Wallet address already linked to a domain."});
+        return;
+      }
       const query_res = await prisma.domain.create({
         data: {
           name: domain,
