@@ -1,8 +1,9 @@
 import React, { ReactNode } from 'react'
 import Link from 'next/link'
 import Head from 'next/head'
-import { Box, Button, Flex, HStack, Link as ChakraLink, Spacer } from '@chakra-ui/react'
+import { Box, Flex, IconButton, Link as ChakraLink, Menu, MenuButton, MenuItem, MenuList, Spacer } from '@chakra-ui/react'
 import Wallet from './wallet/Wallet'
+import { HamburgerIcon } from '@chakra-ui/icons'
 
 type Props = {
   children?: ReactNode
@@ -19,17 +20,39 @@ const Layout = ({ children, title = 'AlgoNS - Algorand Name Service' }: Props) =
     <header>
       <nav>
         <Flex p="2">
-          <HStack spacing="24px">
-            <Link href="/">
-              <Button variant="link">AlgoNS</Button>
-            </Link>
-            <Link href="/about">
-              <Button variant="link">About</Button>
-            </Link>
-            <ChakraLink href="/api" isExternal>
-              <Button variant="link">API</Button>
-            </ChakraLink>
-          </HStack>
+          <Menu>
+            <MenuButton
+              as={IconButton}
+              aria-label='Options'
+              icon={<HamburgerIcon />}
+              colorScheme="pink"
+            />
+            <MenuList>
+              <MenuItem>
+                <Link href="/">
+                  AlgoNS
+                </Link>
+              </MenuItem>
+
+              <MenuItem>
+                <Link href="/about">
+                  About
+                </Link>
+              </MenuItem>
+              
+              <MenuItem>
+                <Link href="/roadmap">
+                  Roadmap
+                </Link>
+              </MenuItem>
+
+              <MenuItem>
+                <ChakraLink href="/api" isExternal>
+                  Link
+                </ChakraLink>
+              </MenuItem>
+            </MenuList>
+          </Menu>
           <Spacer />
           <Box>
             <Wallet />

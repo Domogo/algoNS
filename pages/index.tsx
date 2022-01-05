@@ -3,7 +3,6 @@ import { Box, Button, Flex, Heading, Input, InputGroup, InputRightAddon, Spinner
 import { useState } from "react";
 import axios from "axios";
 import { Domain } from "@prisma/client";
-import Link from "next/link";
 import { useWalletContext } from "context/wallet";
 
 const IndexPage = () => {
@@ -13,10 +12,18 @@ const IndexPage = () => {
   const [loading, setLoading] = useState(false);
   const { address, connected } = useWalletContext(); 
 
+  // numbers, letters, unicode characters (emojis). Limited to 100 characters.
+  const DOMAIN_VALIDATION_REGEX = /^(?:[a-zA-Z0-9\u00a9\u00ae\u2000-\u3300\ud83c\ud000-\udfff\ud83d\ud000-\udfff\ud83e\ud000-\udfff]){1,100}$/;
 
   const handleChange = (e: any) => {
     setSearchTriggered(false);
-    setValue(e.target.value);
+    console.log(e.target.value.match(DOMAIN_VALIDATION_REGEX));
+    if (e.target.value === '' || DOMAIN_VALIDATION_REGEX.test(e.target.value)) {
+      setValue(e.target.value.trim());
+    } else {
+      console.log("invalid");
+      console.log(e.target.value);
+    }
   };
 
   const handleSearch = () => {
@@ -56,7 +63,7 @@ const IndexPage = () => {
           </Flex>
 
           {loading && <Spinner thickness="4px" color="pink.500" size="lg" />}
-          { searchData && !searchTriggered ? (
+          { searchData && searchTriggered ? (
             <div>{`${searchData.name}.${searchData.suffix}`} is already taken and belongs to {searchData.publicKey}</div>
           )
           : !searchData && searchTriggered ?
