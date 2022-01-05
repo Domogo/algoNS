@@ -24,7 +24,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         data: {
           name: domain,
           publicKey: publicKey,
-          suffix: 'algo',
           expiresAt: new Date(new Date().setFullYear(new Date().getFullYear() + 1))
         },
       });
